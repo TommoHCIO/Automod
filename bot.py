@@ -125,12 +125,21 @@ class AutomodBot(commands.Bot):
         
         logger.info(f"Available AI providers: {self.ai_client.get_available_providers()}")
         
-        # Initialize Embeddings Manager
-        if self.config.get("moderation", {}).get("enable_semantic_filtering", True):
+        # Initialize Embeddings Manager (optional - disabled by default to speed up startup)
+        enable_embeddings = self.config.get("moderation", {}).get("enable_semantic_filtering", False)
+        if enable_embeddings:
+            logger.info("Semantic filtering enabled - loading model...")
             self.embeddings = EmbeddingsManager()
         else:
-            logger.info("Semantic filtering disabled")
-            self.embeddings = EmbeddingsManager()  # Still initialize but won't be used
+            logger.info("⚠️ Semantic filtering disabled (faster startup, slightly more false positives)")
+            # Create dummy embeddings manager that always returns False
+            self.embeddings = type('DummyEmbeddings', (), {
+                'is_available': lambda: False,
+                'filter_false_positives': lambda *args: args[0] if len(args) > 0 else False,
+                'is_likely_reclaimed_language': lambda *args: False,
+                'is_likely_false_positive': lambda *args: False
+            })()
+            self.embeddings.is_available = lambda: False
         
         # Initialize Message Queue
         rate_config = self.config.get("rate_limiting", {})

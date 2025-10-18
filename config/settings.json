@@ -8,7 +8,7 @@
     "min_trust_score_for_bypass": 80,
     "min_message_length_to_check": 3,
     "ai_timeout_seconds": 1.0,
-    "enable_semantic_filtering": true,
+    "enable_semantic_filtering": false,
     "enable_cross_server_reputation": false
   },
   "cache": {
