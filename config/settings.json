@@ -1,0 +1,28 @@
+{
+  "bot": {
+    "command_prefix": "!",
+    "status": "Moderating for hate speech",
+    "activity_type": "watching"
+  },
+  "moderation": {
+    "min_trust_score_for_bypass": 80,
+    "min_message_length_to_check": 3,
+    "ai_timeout_seconds": 1.0,
+    "enable_semantic_filtering": true,
+    "enable_cross_server_reputation": false
+  },
+  "cache": {
+    "message_cache_ttl_seconds": 300,
+    "user_data_cache_ttl_seconds": 900,
+    "api_response_cache_ttl_seconds": 300
+  },
+  "rate_limiting": {
+    "max_requests_per_second": 40,
+    "message_queue_delay_seconds": 0.5
+  },
+  "ai_providers": {
+    "primary": "zai",
+    "fallback": ["openai", "mistral"],
+    "confidence_threshold": 0.7
+  }
+}

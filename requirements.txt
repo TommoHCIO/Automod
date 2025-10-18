@@ -1,0 +1,23 @@
+# Discord Bot
+discord.py>=2.3.2
+python-dotenv>=1.0.0
+
+# Database
+motor>=3.3.2
+pymongo>=4.6.1
+
+# Caching
+redis>=5.0.1
+aioredis>=2.0.1
+
+# AI APIs
+openai>=1.10.0
+zhipuai>=2.0.1
+
+# ML/NLP for embeddings
+sentence-transformers>=2.2.2
+numpy>=1.24.0
+
+# Utilities
+aiohttp>=3.9.1
+python-dateutil>=2.8.2

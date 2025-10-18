@@ -1,0 +1,15 @@
+{
+  "profanity_whitelist": [
+    "fuck",
+    "shit",
+    "bitch",
+    "damn",
+    "hell",
+    "ass",
+    "crap"
+  ],
+  "comments": {
+    "note": "These words are allowed and will be filtered out from hate speech detection results",
+    "last_updated": "2025-01-18"
+  }
+}

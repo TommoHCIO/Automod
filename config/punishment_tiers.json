@@ -1,0 +1,50 @@
+{
+  "tiers": [
+    {
+      "violation_count": 1,
+      "action": "warning",
+      "duration_seconds": 0,
+      "trust_penalty": 0,
+      "message": "⚠️ First warning: Your message contained hate speech and has been removed. Please review our community guidelines."
+    },
+    {
+      "violation_count": 2,
+      "action": "timeout",
+      "duration_seconds": 600,
+      "trust_penalty": 15,
+      "message": "🚫 Second violation: You've been timed out for 10 minutes. Repeated violations will result in harsher penalties."
+    },
+    {
+      "violation_count": 3,
+      "action": "timeout",
+      "duration_seconds": 3600,
+      "trust_penalty": 20,
+      "message": "🔴 Third violation: You've been timed out for 1 hour. This is your final warning."
+    },
+    {
+      "violation_count": 4,
+      "action": "timeout",
+      "duration_seconds": 86400,
+      "trust_penalty": 25,
+      "message": "⛔ Fourth violation: You've been timed out for 24 hours. Next violation will result in a ban."
+    },
+    {
+      "violation_count": 5,
+      "action": "ban",
+      "duration_seconds": 0,
+      "trust_penalty": 100,
+      "message": "🔨 Banned: Multiple severe violations of community guidelines."
+    }
+  ],
+  "severity_multipliers": {
+    "racism": 2.0,
+    "homophobia": 2.0,
+    "transphobia": 2.0,
+    "threats": 3.0
+  },
+  "time_decay": {
+    "enabled": true,
+    "days_until_decay": 90,
+    "decay_percentage": 50
+  }
+}

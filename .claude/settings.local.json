@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init)",
+      "Bash(git remote add origin https://github.com/TommoHCIO/Automod.git)",
+      "Bash(git branch -M main)",
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit: Discord Automod Bot with AI detection\n\nFeatures:\n- AI-powered hate speech detection (Z.ai + OpenAI)\n- Progressive punishment system\n- User reputation/trust scores\n- Redis caching for performance\n- MongoDB persistence\n- Semantic filtering to reduce false positives\n- Profanity whitelist support\n- Slash commands for admins\n- Rich mod logging\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
