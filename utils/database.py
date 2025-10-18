@@ -26,11 +26,17 @@ class DatabaseManager:
         """Connect to MongoDB and create indexes"""
         try:
             self.client = AsyncIOMotorClient(self.mongodb_uri)
-            self.db = self.client.get_database()
+            # Try to get database from URI, fallback to 'automod' if not specified
+            try:
+                self.db = self.client.get_database()
+            except Exception:
+                # If no database in URI, use 'automod' as default
+                logger.warning("No database specified in URI, using 'automod' as default")
+                self.db = self.client.get_database('automod')
             
             # Test connection
             await self.client.admin.command('ping')
-            logger.info("✅ Connected to MongoDB")
+            logger.info(f"✅ Connected to MongoDB (database: {self.db.name})")
             
             # Create indexes
             await self._create_indexes()
