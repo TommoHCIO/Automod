@@ -2,7 +2,7 @@
 User Reputation Model - Tracks user trust scores and warning counts
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List
 
 
@@ -35,8 +35,8 @@ class UserReputation:
         self.history = history or []
         self.positive_actions = positive_actions
         self.account_age_days = account_age_days
-        self.first_seen = first_seen or datetime.utcnow()
-        self.last_updated = last_updated or datetime.utcnow()
+        self.first_seen = first_seen or datetime.now(timezone.utc)
+        self.last_updated = last_updated or datetime.now(timezone.utc)
         self._id = _id
     
     def add_violation(self, violation_id: str, penalty: int = 15):
@@ -44,21 +44,21 @@ class UserReputation:
         self.history.append(violation_id)
         self.warning_count += 1
         self.trust_score = max(0, self.trust_score - penalty)
-        self.last_violation = datetime.utcnow()
-        self.last_updated = datetime.utcnow()
+        self.last_violation = datetime.now(timezone.utc)
+        self.last_updated = datetime.now(timezone.utc)
     
     def add_positive_action(self, reward: int = 5):
         """Reward positive behavior"""
         self.positive_actions += 1
         self.trust_score = min(100, self.trust_score + reward)
-        self.last_updated = datetime.utcnow()
+        self.last_updated = datetime.now(timezone.utc)
     
     def reset_warnings(self):
         """Reset warnings (admin action)"""
         self.warning_count = 0
         self.history = []
         self.trust_score = 60  # Reset to default
-        self.last_updated = datetime.utcnow()
+        self.last_updated = datetime.now(timezone.utc)
     
     def calculate_trust_score(self, account_creation_date: datetime) -> int:
         """
@@ -69,7 +69,10 @@ class UserReputation:
         base_score = 60
         
         # Account age bonus (max +20)
-        account_age_days = (datetime.utcnow() - account_creation_date).days
+        now = datetime.now(timezone.utc)
+        if account_creation_date.tzinfo is None:
+            account_creation_date = account_creation_date.replace(tzinfo=timezone.utc)
+        account_age_days = (now - account_creation_date).days
         age_bonus = min(20, account_age_days // 7)  # +1 per week, max 20
         
         # New account penalty

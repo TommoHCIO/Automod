@@ -5,7 +5,7 @@ Logging Cog - Creates rich embeds for moderation actions
 import logging
 import discord
 from discord.ext import commands
-from datetime import datetime
+from datetime import datetime, timezone
 
 from models import Violation, UserReputation
 from utils import TrustScoreCalculator
@@ -91,7 +91,7 @@ class LoggingCog(commands.Cog):
         embed = discord.Embed(
             title="🚫 Hate Speech Detected",
             color=color,
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         # User info
@@ -208,7 +208,7 @@ class LoggingCog(commands.Cog):
         embed = discord.Embed(
             title="🛠️ Manual Moderator Action",
             color=discord.Color.blue(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         embed.set_author(

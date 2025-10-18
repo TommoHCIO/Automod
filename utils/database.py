@@ -5,7 +5,7 @@ MongoDB Database Manager with async operations using Motor
 import logging
 from typing import Optional, Dict, Any, List
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
-from datetime import datetime
+from datetime import datetime, timezone
 
 from models import Violation, UserReputation, GuildConfig
 
@@ -114,7 +114,7 @@ class DatabaseManager:
         from datetime import timedelta
         
         collection = self.db[Violation.collection_name]
-        cutoff_time = datetime.utcnow() - timedelta(hours=hours)
+        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=hours)
         
         cursor = collection.find({
             "guild_id": guild_id,
@@ -243,7 +243,7 @@ class DatabaseManager:
         
         # Violations in last 24 hours
         from datetime import timedelta
-        cutoff = datetime.utcnow() - timedelta(hours=24)
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
         recent_violations = await violation_col.count_documents({
             "guild_id": guild_id,
             "timestamp": {"$gte": cutoff}

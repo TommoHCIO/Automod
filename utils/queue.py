@@ -7,7 +7,7 @@ import asyncio
 import logging
 from collections import deque
 from typing import Callable, Any
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +66,7 @@ class MessageQueue:
             "args": args,
             "kwargs": kwargs,
             "future": future,
-            "queued_at": datetime.utcnow()
+            "queued_at": datetime.now(timezone.utc)
         })
         
         self.total_queued += 1
@@ -99,7 +99,7 @@ class MessageQueue:
                 self.total_processed += 1
                 
                 # Track request timestamp
-                self.request_timestamps.append(datetime.utcnow())
+                self.request_timestamps.append(datetime.now(timezone.utc))
                 
                 # Clean old timestamps (older than 1 second)
                 self._clean_old_timestamps()
@@ -130,7 +130,7 @@ class MessageQueue:
     
     def _clean_old_timestamps(self):
         """Remove timestamps older than 1 second"""
-        cutoff = datetime.utcnow() - timedelta(seconds=1)
+        cutoff = datetime.now(timezone.utc) - timedelta(seconds=1)
         
         while self.request_timestamps and self.request_timestamps[0] < cutoff:
             self.request_timestamps.popleft()

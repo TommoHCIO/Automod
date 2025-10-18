@@ -5,7 +5,7 @@ Moderation Cog - Core AI-based hate speech detection
 import logging
 import discord
 from discord.ext import commands
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 from utils import CacheManager, DatabaseManager, AIClient, EmbeddingsManager, TrustScoreCalculator
@@ -314,7 +314,7 @@ class ModerationCog(commands.Cog):
         embed = discord.Embed(
             title="🔍 Manual Moderation Check",
             color=discord.Color.red() if result.flagged else discord.Color.green(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         embed.add_field(

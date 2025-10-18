@@ -6,7 +6,7 @@ import logging
 import discord
 from discord import app_commands
 from discord.ext import commands
-from datetime import datetime
+from datetime import datetime, timezone
 
 from utils import DatabaseManager, CacheManager, TrustScoreCalculator
 
@@ -49,7 +49,7 @@ class AdminCog(commands.Cog):
         embed = discord.Embed(
             title="🤖 Automod Bot Status",
             color=discord.Color.blue(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         # Statistics
@@ -117,7 +117,7 @@ class AdminCog(commands.Cog):
         embed = discord.Embed(
             title=f"⚠️ Warnings for {user}",
             color=discord.Color.orange(),
-            timestamp=datetime.utcnow()
+            timestamp=datetime.now(timezone.utc)
         )
         
         embed.set_thumbnail(url=user.display_avatar.url)
@@ -140,7 +140,7 @@ class AdminCog(commands.Cog):
         if violations:
             violation_text = []
             for i, v in enumerate(violations[:5], 1):
-                time_ago = (datetime.utcnow() - v.timestamp).days
+                time_ago = (datetime.now(timezone.utc) - v.timestamp).days
                 violation_text.append(
                     f"{i}. {v.reason} ({time_ago}d ago)"
                 )
@@ -311,7 +311,11 @@ class AdminCog(commands.Cog):
             )
             
             # Account age bonus
-            account_age_days = (datetime.utcnow() - user.created_at).days
+            now = datetime.now(timezone.utc)
+            account_creation = user.created_at
+            if account_creation.tzinfo is None:
+                account_creation = account_creation.replace(tzinfo=timezone.utc)
+            account_age_days = (now - account_creation).days
             age_bonus = TrustScoreCalculator.calculate_account_age_bonus(user.created_at)
             
             embed.add_field(

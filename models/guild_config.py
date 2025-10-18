@@ -2,7 +2,7 @@
 Guild Configuration Model - Per-server settings
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any, List
 
 
@@ -43,8 +43,8 @@ class GuildConfig:
         self.admin_role_ids = admin_role_ids or []
         self.ignored_channel_ids = ignored_channel_ids or []
         self.ignored_user_ids = ignored_user_ids or []
-        self.created_at = created_at or datetime.utcnow()
-        self.last_updated = last_updated or datetime.utcnow()
+        self.created_at = created_at or datetime.now(timezone.utc)
+        self.last_updated = last_updated or datetime.now(timezone.utc)
         self._id = _id
     
     @staticmethod
@@ -71,14 +71,14 @@ class GuildConfig:
         word_lower = word.lower()
         if word_lower not in self.allowed_words:
             self.allowed_words.append(word_lower)
-            self.last_updated = datetime.utcnow()
+            self.last_updated = datetime.now(timezone.utc)
     
     def remove_allowed_word(self, word: str) -> bool:
         """Remove a word from the allowed list"""
         word_lower = word.lower()
         if word_lower in self.allowed_words:
             self.allowed_words.remove(word_lower)
-            self.last_updated = datetime.utcnow()
+            self.last_updated = datetime.now(timezone.utc)
             return True
         return False
     

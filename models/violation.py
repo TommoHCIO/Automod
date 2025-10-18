@@ -2,7 +2,7 @@
 Violation Model - Tracks hate speech violations
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Dict, Any
 
 
@@ -36,7 +36,7 @@ class Violation:
         self.ai_provider = ai_provider
         self.confidence = confidence
         self.action_taken = action_taken
-        self.timestamp = timestamp or datetime.utcnow()
+        self.timestamp = timestamp or datetime.now(timezone.utc)
         self.message_id = message_id
         self.channel_id = channel_id
         self.moderator_id = moderator_id
