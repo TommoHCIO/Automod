@@ -3,7 +3,7 @@ Trust Score Calculator for User Reputation System
 """
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
@@ -40,7 +40,11 @@ class TrustScoreCalculator:
         Returns:
             Initial trust score (0-100)
         """
-        account_age_days = (datetime.utcnow() - account_creation_date).days
+        # Use timezone-aware datetime
+        now = datetime.now(timezone.utc)
+        if account_creation_date.tzinfo is None:
+            account_creation_date = account_creation_date.replace(tzinfo=timezone.utc)
+        account_age_days = (now - account_creation_date).days
         
         # New accounts start lower
         if account_age_days < TrustScoreCalculator.NEW_ACCOUNT_DAYS:
@@ -60,7 +64,11 @@ class TrustScoreCalculator:
         Returns:
             Bonus points (0-20)
         """
-        account_age_days = (datetime.utcnow() - account_creation_date).days
+        # Use timezone-aware datetime
+        now = datetime.now(timezone.utc)
+        if account_creation_date.tzinfo is None:
+            account_creation_date = account_creation_date.replace(tzinfo=timezone.utc)
+        account_age_days = (now - account_creation_date).days
         
         # +1 point per week, max 20 points
         bonus = min(20, account_age_days // 7)
@@ -118,7 +126,7 @@ class TrustScoreCalculator:
         Returns:
             Effective violation count after decay
         """
-        cutoff_date = datetime.utcnow() - timedelta(days=decay_days)
+        cutoff_date = datetime.now(timezone.utc) - timedelta(days=decay_days)
         
         recent_violations = 0
         old_violations = 0
