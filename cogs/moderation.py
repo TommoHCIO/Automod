@@ -180,15 +180,21 @@ class ModerationCog(commands.Cog):
         
         # Content is flagged - take action
         logger.info(f"Hate speech detected from {message.author} ({message.author.id}): {confidence:.2%}")
-        
+
         # Delete message
+        message_deleted = False
         try:
             await message.delete()
+            message_deleted = True
+            logger.info(f"✅ Deleted hate speech message from {message.author}")
         except discord.Forbidden:
-            logger.error(f"Missing permissions to delete message in {message.guild.id}")
+            logger.error(f"❌ Missing permissions to delete message in {message.guild.id}")
             return
+        except discord.NotFound:
+            logger.warning(f"⚠️ Message already deleted (user removed it)")
+            message_deleted = True  # Continue processing even if user deleted it
         except Exception as e:
-            logger.error(f"Error deleting message: {e}")
+            logger.error(f"❌ Error deleting message: {e}")
             return
         
         # Determine severity
